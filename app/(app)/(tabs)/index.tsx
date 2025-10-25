@@ -15,7 +15,7 @@ export default function Kitaab() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Sawab Ki Kitaab</Text>
+        <Text style={styles.title}>Kitaab</Text>
       </View>
       <View style={styles.line} />
 
@@ -108,9 +108,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   title: {
-    fontSize: 28,
+    fontSize: 24,
     textAlign: "center",
-    color: APP_COLORS.primary,
+    color: APP_COLORS.text,
     fontWeight: "bold",
   },
   subtitle: {
