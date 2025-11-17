@@ -1,9 +1,10 @@
 import { APP_COLORS } from "@/constants/Colors";
 import AuthWrapper, { authStyles } from "@/layouts/Auth/AuthWrapper";
+import useResetPassword from "@/layouts/Auth/ResetPassword/ResetPasswordContainer";
 import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
-import { navigate } from "expo-router/build/global-state/routing";
 import React from "react";
 import {
+  ActivityIndicator,
   StyleSheet,
   Text,
   TextInput,
@@ -12,6 +13,12 @@ import {
 } from "react-native";
 
 const ResetPasswordScreen = () => {
+  const {
+    isLoading,
+    handleResetPassword,
+    resetPasswordCredentials,
+    setResetPasswordCredentials,
+  } = useResetPassword();
   // --- Form Content ---
   const FormContent = (
     <>
@@ -29,6 +36,12 @@ const ResetPasswordScreen = () => {
           placeholder="Enter new password"
           placeholderTextColor={APP_COLORS.placeholder}
           secureTextEntry={true}
+          onChange={(e) =>
+            setResetPasswordCredentials({
+              password: e.nativeEvent.text,
+              confirmPassword: resetPasswordCredentials.confirmPassword,
+            })
+          }
         />
         {/* Toggle password visibility icon */}
         <MaterialCommunityIcons
@@ -52,6 +65,12 @@ const ResetPasswordScreen = () => {
           placeholder="Confirm new password"
           placeholderTextColor={APP_COLORS.placeholder}
           secureTextEntry={true}
+          onChange={(e) =>
+            setResetPasswordCredentials({
+              password: resetPasswordCredentials.confirmPassword,
+              confirmPassword: e.nativeEvent.text,
+            })
+          }
         />
         {/* Toggle password visibility icon */}
         <MaterialCommunityIcons
@@ -64,8 +83,9 @@ const ResetPasswordScreen = () => {
       {/* Reset Password Button */}
       <TouchableOpacity
         style={[authStyles.primaryButton, { marginTop: 10 }]}
-        onPress={() => navigate("/(auth)/sign_in")}
+        onPress={handleResetPassword}
       >
+        {isLoading && <ActivityIndicator color={"#fff"} />}
         <Text style={authStyles.primaryButtonText}>Reset Password</Text>
       </TouchableOpacity>
     </>

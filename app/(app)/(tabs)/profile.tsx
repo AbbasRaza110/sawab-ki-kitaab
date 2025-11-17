@@ -3,7 +3,7 @@ import { scale, verticalScale } from "@/constants/metrics";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 import {
-  Image,
+  ActivityIndicator,
   ScrollView,
   StyleSheet,
   Text,
@@ -11,16 +11,22 @@ import {
   View,
 } from "react-native";
 
-import { navigate } from "expo-router/build/global-state/routing";
-import img1 from "../../../assets/images/carouselImgs/img1.jpg";
+import useProfile from "@/layouts/App/Profile/useProfile";
 
 const SETTINGS_ITEMS = [
-  { icon: "bell-outline", title: "Notifications", key: "notifications" },
   { icon: "shield-outline", title: "Privacy", key: "privacy" },
   { icon: "information-outline", title: "About", key: "about" },
 ];
 
 const ProfileScreen = () => {
+  const { handleLogout, isLoading, userData } = useProfile();
+  const initials = userData?.name
+    ? userData.name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+    : "";
   return (
     <View style={styles.outerContainer}>
       <ScrollView
@@ -31,21 +37,15 @@ const ProfileScreen = () => {
         <View style={styles.header}>
           <Text style={styles.title}>Profile</Text>
         </View>
-        <View style={styles.line} />
         {/* Profile Header Section */}
         <View style={styles.profileHeader}>
           <View style={styles.avatarContainer}>
-            <Image source={img1} style={styles.avatar} />
-            <TouchableOpacity style={styles.editIconContainer}>
-              <MaterialCommunityIcons
-                name="pencil"
-                size={16}
-                color={APP_COLORS.background}
-              />
+            <TouchableOpacity style={styles.avatar}>
+              <Text style={styles.avatarInitials}>{initials}</Text>
             </TouchableOpacity>
           </View>
-          <Text style={styles.userName}>Asad Raza</Text>
-          <Text style={styles.userHandle}>@asadraza</Text>
+          <Text style={styles.userName}>{userData?.name}</Text>
+          {/* <Text style={styles.userHandle}>{userData?.email}</Text> */}
           <Text style={styles.joinDate}>Joined 2022</Text>
         </View>
 
@@ -63,20 +63,7 @@ const ProfileScreen = () => {
             <View style={styles.detailTextContainer}>
               <Text style={styles.detailLabel}>Email</Text>
 
-              <Text style={styles.detailValue}>aisha.khan@email.com</Text>
-            </View>
-          </View>
-          <View style={styles.detailItem}>
-            <View style={styles.iconBackground}>
-              <MaterialCommunityIcons
-                name="phone-outline"
-                size={24}
-                color={APP_COLORS.primary}
-              />
-            </View>
-            <View style={styles.detailTextContainer}>
-              <Text style={styles.detailLabel}>Phone</Text>
-              <Text style={styles.detailValue}>+1 (555) 123-4567</Text>
+              <Text style={styles.detailValue}>{userData?.email}</Text>
             </View>
           </View>
         </View>
@@ -110,15 +97,14 @@ const ProfileScreen = () => {
         </View>
 
         {/* Log Out Button */}
-        <TouchableOpacity
-          style={styles.logoutButton}
-          onPress={() => navigate("/(auth)/sign_in")}
-        >
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          {isLoading && <ActivityIndicator color={APP_COLORS.logoutText} />}
           <MaterialCommunityIcons
             name="logout"
             size={20}
             color={APP_COLORS.logoutText}
           />
+
           <Text style={styles.logoutButtonText}>Log Out</Text>
         </TouchableOpacity>
       </ScrollView>
@@ -141,12 +127,7 @@ const styles = StyleSheet.create({
   header: {
     alignItems: "center",
   },
-  line: {
-    height: 1,
-    width: "100%",
-    backgroundColor: "#E5E7EB",
-    opacity: 0.8,
-  },
+
   outerContainer: {
     flex: 1,
     padding: scale(16),
@@ -170,11 +151,18 @@ const styles = StyleSheet.create({
     position: "relative",
     marginBottom: 10,
   },
+  avatarInitials: {
+    color: APP_COLORS.white,
+    fontSize: scale(20),
+    fontWeight: "bold",
+  },
   avatar: {
     width: 100,
     height: 100,
+    backgroundColor: APP_COLORS.primary,
     borderRadius: 50,
-    // backgroundColor: APP_COLORS.lightText,
+    alignItems: "center", // Center horizontally
+    justifyContent: "center",
   },
   editIconContainer: {
     position: "absolute",

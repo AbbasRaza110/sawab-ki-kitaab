@@ -1,23 +1,21 @@
 import AutoplayCarousel from "@/components/Carousel";
-import CounterInput from "@/components/InputCounter/InputCounter";
 import { APP_COLORS } from "@/constants/Colors";
 import { scale, verticalScale } from "@/constants/metrics";
-import { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import useKitaab from "@/layouts/App/Kitaab/KitaabContainer";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { navigate } from "expo-router/build/global-state/routing";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import img1 from "../../../assets/images/carouselImgs/img1.jpg";
 import img2 from "../../../assets/images/carouselImgs/img2.jpg";
 import img3 from "../../../assets/images/carouselImgs/img3.jpg";
 
 export default function Kitaab() {
-  const [sawabCount, setSawabCount] = useState(0);
-  const [gunahCount, setGunahCount] = useState(0);
-
+  const { isLoading, totals } = useKitaab();
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Kitaab</Text>
       </View>
-      <View style={styles.line} />
 
       <AutoplayCarousel autoPlayInterval={2000} data={[img1, img2, img3]} />
 
@@ -28,7 +26,7 @@ export default function Kitaab() {
         </View>
         <View style={{ flexDirection: "row", gap: 10 }}>
           <View style={styles.sawabGunahContainer}>
-            <Text style={styles.sawabGunahTitle}>{sawabCount}</Text>
+            <Text style={styles.sawabGunahTitle}>{totals?.sawab}</Text>
             <Text style={[styles.subtitle, { color: APP_COLORS.lightText }]}>
               Sawab
             </Text>
@@ -40,28 +38,25 @@ export default function Kitaab() {
             ]}
           >
             <Text style={[styles.sawabGunahTitle, { color: APP_COLORS.text }]}>
-              {gunahCount}
+              {totals?.gunah}
             </Text>
             <Text style={[styles.subtitle, { color: APP_COLORS.lightText }]}>
               Gunah
             </Text>
           </View>
         </View>
-        <View>
-          <CounterInput
-            title="Add Sawab"
-            count={sawabCount}
-            setCount={setSawabCount}
-          />
-          <CounterInput
-            title="Add Gunah"
-            addBg={APP_COLORS.background2}
-            count={gunahCount}
-            setCount={setGunahCount}
-          />
-        </View>
-        <Text style={styles.sawabGained}>You gained 10 Sawab today</Text>
+
+        <Text style={styles.sawabGained}>
+          You gained {totals?.todaySawab} Sawab today
+        </Text>
       </View>
+
+      <TouchableOpacity
+        style={styles.floatingButton}
+        onPress={() => navigate("/(app)/add_record")}
+      >
+        <MaterialCommunityIcons name="plus" size={30} color="#fff" />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -69,6 +64,17 @@ export default function Kitaab() {
 // ✨ Same styles from your Kitaab theme (unchanged)
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, gap: 24 },
+  floatingButton: {
+    backgroundColor: APP_COLORS.primary,
+    height: 50,
+    width: 50,
+    borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    bottom: 30,
+    right: 20,
+  },
   sawabGained: {
     fontSize: 14,
     fontWeight: "semibold",
@@ -107,6 +113,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
   },
+  header: {
+    alignItems: "center",
+  },
   title: {
     fontSize: 24,
     textAlign: "center",
@@ -118,14 +127,5 @@ const styles = StyleSheet.create({
     fontWeight: "light",
     textAlign: "left",
     color: APP_COLORS.lightText,
-  },
-  header: {
-    alignItems: "center",
-  },
-  line: {
-    height: 1,
-    width: "100%",
-    backgroundColor: "#E5E7EB",
-    opacity: 0.8,
   },
 });

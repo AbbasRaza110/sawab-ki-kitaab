@@ -1,11 +1,19 @@
 import { APP_COLORS } from "@/constants/Colors";
 import AuthWrapper, { authStyles } from "@/layouts/Auth/AuthWrapper";
+import useSignUp from "@/layouts/Auth/SignUp/SignUpContainer";
 import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Link } from "expo-router"; // Import Link for navigation
 import React from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 const SignUpScreen = () => {
+  const { handleSignUp, credentials, setCredentials, isLoading } = useSignUp();
   // --- Form Content ---
   const FormContent = (
     <>
@@ -22,6 +30,14 @@ const SignUpScreen = () => {
           placeholder="Name"
           placeholderTextColor={APP_COLORS.placeholder}
           keyboardType="default"
+          onChange={(e) =>
+            setCredentials({
+              name: e.nativeEvent.text,
+              email: credentials.email,
+              password: credentials.password,
+              confirmPassword: credentials.confirmPassword,
+            })
+          }
         />
       </View>
 
@@ -39,6 +55,14 @@ const SignUpScreen = () => {
           placeholderTextColor={APP_COLORS.placeholder}
           keyboardType="email-address"
           autoCapitalize="none"
+          onChange={(e) =>
+            setCredentials({
+              name: credentials.name,
+              email: e.nativeEvent.text,
+              password: credentials.password,
+              confirmPassword: credentials.confirmPassword,
+            })
+          }
         />
       </View>
 
@@ -55,6 +79,14 @@ const SignUpScreen = () => {
           placeholder="Password"
           placeholderTextColor={APP_COLORS.placeholder}
           secureTextEntry={true}
+          onChange={(e) =>
+            setCredentials({
+              name: credentials.name,
+              email: credentials.email,
+              password: e.nativeEvent.text,
+              confirmPassword: credentials.confirmPassword,
+            })
+          }
         />
       </View>
 
@@ -71,11 +103,20 @@ const SignUpScreen = () => {
           placeholder="Confirm Password"
           placeholderTextColor={APP_COLORS.placeholder}
           secureTextEntry={true}
+          onChange={(e) =>
+            setCredentials({
+              name: credentials.name,
+              email: credentials.email,
+              password: credentials.password,
+              confirmPassword: e.nativeEvent.text,
+            })
+          }
         />
       </View>
 
       {/* Create Account Button */}
-      <TouchableOpacity style={authStyles.primaryButton}>
+      <TouchableOpacity style={authStyles.primaryButton} onPress={handleSignUp}>
+        {isLoading && <ActivityIndicator color="#fff" />}
         <Text style={authStyles.primaryButtonText}>Create Account</Text>
       </TouchableOpacity>
     </>

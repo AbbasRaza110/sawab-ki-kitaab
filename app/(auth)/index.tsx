@@ -1,12 +1,20 @@
 import { APP_COLORS } from "@/constants/Colors";
 import AuthWrapper, { authStyles } from "@/layouts/Auth/AuthWrapper";
+import useSignIn from "@/layouts/Auth/SignIn/SignInContainer";
 import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Link } from "expo-router"; // Import Link for navigation
 import { navigate } from "expo-router/build/global-state/routing";
 import React from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 const SignInScreen = () => {
+  const { handleLogin, credentials, setCredentials, isLoading } = useSignIn();
   // --- Form Content ---
   const FormContent = (
     <>
@@ -25,6 +33,12 @@ const SignInScreen = () => {
           placeholderTextColor={APP_COLORS.placeholder}
           keyboardType="email-address"
           autoCapitalize="none"
+          onChange={(e) =>
+            setCredentials({
+              email: e.nativeEvent.text,
+              password: credentials.password,
+            })
+          }
         />
       </View>
 
@@ -42,6 +56,12 @@ const SignInScreen = () => {
           placeholder="Enter your password"
           placeholderTextColor={APP_COLORS.placeholder}
           secureTextEntry={true}
+          onChange={(e) =>
+            setCredentials({
+              email: credentials.email,
+              password: e.nativeEvent.text,
+            })
+          }
         />
       </View>
 
@@ -54,10 +74,8 @@ const SignInScreen = () => {
       </TouchableOpacity>
 
       {/* Sign In Button */}
-      <TouchableOpacity
-        style={authStyles.primaryButton}
-        onPress={() => navigate("/(auth)/sign_up")}
-      >
+      <TouchableOpacity style={authStyles.primaryButton} onPress={handleLogin}>
+        {isLoading && <ActivityIndicator color="#fff" />}
         <Text style={authStyles.primaryButtonText}>Sign In</Text>
       </TouchableOpacity>
     </>

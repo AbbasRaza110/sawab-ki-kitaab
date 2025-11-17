@@ -1,10 +1,11 @@
 import { APP_COLORS } from "@/constants/Colors";
 import AuthWrapper, { authStyles } from "@/layouts/Auth/AuthWrapper";
+import useForgotPassword from "@/layouts/Auth/ForgotPassword/ForgotPasswordContainer";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Link } from "expo-router";
-import { navigate } from "expo-router/build/global-state/routing";
 import React from "react";
 import {
+  ActivityIndicator,
   StyleSheet,
   Text,
   TextInput,
@@ -13,6 +14,8 @@ import {
 } from "react-native";
 
 const ForgotPasswordScreen = () => {
+  const { email, handleForgotPassword, setEmail, isLoading } =
+    useForgotPassword();
   // --- Form Content ---
   const FormContent = (
     <>
@@ -31,15 +34,17 @@ const ForgotPasswordScreen = () => {
           placeholderTextColor={APP_COLORS.placeholder}
           keyboardType="email-address"
           autoCapitalize="none"
+          onChange={(e) => setEmail(e.nativeEvent.text)}
         />
       </View>
 
       {/* Send Reset Link Button */}
       <TouchableOpacity
         style={[authStyles.primaryButton, { marginTop: 10 }]}
-        onPress={() => navigate("/(auth)/reset_password")}
+        onPress={handleForgotPassword}
       >
-        <Text style={authStyles.primaryButtonText}>Send Reset Link</Text>
+        {isLoading && <ActivityIndicator color={"#fff"} />}
+        <Text style={authStyles.primaryButtonText}>Submit</Text>
       </TouchableOpacity>
     </>
   );
@@ -64,7 +69,7 @@ const ForgotPasswordScreen = () => {
       children={FormContent}
       footer={FooterContent}
       title="Can't log in?"
-      subtitle=" Enter your email address and we'll send you a link to get back into your account."
+      subtitle="Enter your email address to reset your password."
     />
   );
 };

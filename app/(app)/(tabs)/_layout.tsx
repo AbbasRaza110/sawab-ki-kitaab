@@ -9,13 +9,13 @@ export default function TabLayout() {
 
   const tabScreens = [
     {
-      name: "index",
+      name: "kitaab",
       title: "Kitaab",
       icon: "book-open-variant",
     },
     {
-      name: "leaderboard",
-      title: "Leaderboard",
+      name: "history",
+      title: "History",
       icon: "trophy-outline",
     },
     {
@@ -33,9 +33,9 @@ export default function TabLayout() {
           backgroundColor: "#fff",
           borderTopWidth: 1,
           borderTopColor: "#e5e7eb",
-          height: 60 + insets.bottom,
-          paddingBottom: insets.bottom || 10,
-          paddingTop: 8,
+          height: 60,
+          paddingBottom: 0,
+          paddingTop: 4,
         },
         tabBarLabelStyle: {
           fontSize: 12,

@@ -11,4 +11,5 @@ export const APP_COLORS = {
   primaryAppBg: "#DCF2EB",
   logoutBg: "#F5E5E4",
   logoutText: "#EF3F40",
+  border: "#D1D5DB",
 };

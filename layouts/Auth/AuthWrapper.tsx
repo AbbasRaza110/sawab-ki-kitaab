@@ -140,11 +140,17 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 5,
     elevation: 5,
+    flexDirection: "row",
+    gap: 8,
+    justifyContent: "center",
   },
   primaryButtonText: {
     color: APP_COLORS.background,
     fontSize: 18,
     fontWeight: "bold",
+    flexDirection: "row",
+    gap: 8,
+    justifyContent: "center",
   },
   // Footer Link Styles
   linkText: {
