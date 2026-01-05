@@ -18,6 +18,8 @@ const ResetPasswordScreen = () => {
     handleResetPassword,
     resetPasswordCredentials,
     setResetPasswordCredentials,
+    isPasswordVisible,
+    setIsPasswordVisible,
   } = useResetPassword();
   // --- Form Content ---
   const FormContent = (
@@ -35,7 +37,7 @@ const ResetPasswordScreen = () => {
           style={authStyles.input}
           placeholder="Enter new password"
           placeholderTextColor={APP_COLORS.placeholder}
-          secureTextEntry={true}
+          secureTextEntry={!isPasswordVisible?.password}
           onChange={(e) =>
             setResetPasswordCredentials({
               password: e.nativeEvent.text,
@@ -43,12 +45,21 @@ const ResetPasswordScreen = () => {
             })
           }
         />
-        {/* Toggle password visibility icon */}
-        <MaterialCommunityIcons
-          name="eye-outline"
-          size={20}
-          color={APP_COLORS.lightText}
-        />
+        <TouchableOpacity
+          onPress={() =>
+            setIsPasswordVisible({
+              confirmPassword: isPasswordVisible.confirmPassword,
+              password: !isPasswordVisible.password,
+            })
+          }
+          style={{ padding: 10 }}
+        >
+          <MaterialCommunityIcons
+            name={isPasswordVisible.password ? "eye-off" : "eye"}
+            size={20}
+            color={APP_COLORS.placeholder}
+          />
+        </TouchableOpacity>
       </View>
 
       {/* Confirm New Password Input */}
@@ -64,7 +75,7 @@ const ResetPasswordScreen = () => {
           style={authStyles.input}
           placeholder="Confirm new password"
           placeholderTextColor={APP_COLORS.placeholder}
-          secureTextEntry={true}
+          secureTextEntry={!isPasswordVisible?.confirmPassword}
           onChange={(e) =>
             setResetPasswordCredentials({
               password: resetPasswordCredentials.confirmPassword,
@@ -72,12 +83,21 @@ const ResetPasswordScreen = () => {
             })
           }
         />
-        {/* Toggle password visibility icon */}
-        <MaterialCommunityIcons
-          name="eye-outline"
-          size={20}
-          color={APP_COLORS.lightText}
-        />
+        <TouchableOpacity
+          onPress={() =>
+            setIsPasswordVisible({
+              confirmPassword: !isPasswordVisible.confirmPassword,
+              password: isPasswordVisible.password,
+            })
+          }
+          style={{ padding: 10 }}
+        >
+          <MaterialCommunityIcons
+            name={isPasswordVisible.confirmPassword ? "eye-off" : "eye"}
+            size={20}
+            color={APP_COLORS.placeholder}
+          />
+        </TouchableOpacity>
       </View>
 
       {/* Reset Password Button */}

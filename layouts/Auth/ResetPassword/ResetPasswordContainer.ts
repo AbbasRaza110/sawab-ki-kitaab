@@ -1,11 +1,16 @@
 import apiClient from "@/services/apiService";
-import { useLocalSearchParams } from "expo-router";
-import { navigate } from "expo-router/build/global-state/routing";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
 import { Alert } from "react-native";
 
 export default function useResetPassword() {
   const { email, otp } = useLocalSearchParams();
+  const router = useRouter();
+  const [isPasswordVisible, setIsPasswordVisible] = React.useState({
+    password: false,
+    confirmPassword: false,
+  });
+
   console.log("asdasdas", email, otp);
 
   const [isLoading, setIsLoading] = React.useState(false);
@@ -26,7 +31,7 @@ export default function useResetPassword() {
         otp,
       });
       console.log("Reset Password Response:", response.data);
-      navigate("/(auth)/sign_in");
+      router.replace("/(auth)");
       Alert.alert("Success", "Your password has been reset successfully!");
     } catch (error: any) {
       Alert.alert("Reset Password Failed", error?.response.data.message);
@@ -40,5 +45,7 @@ export default function useResetPassword() {
     setResetPasswordCredentials,
     resetPasswordCredentials,
     isLoading,
+    isPasswordVisible,
+    setIsPasswordVisible,
   };
 }

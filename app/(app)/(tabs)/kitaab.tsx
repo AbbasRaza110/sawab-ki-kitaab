@@ -2,62 +2,65 @@ import AutoplayCarousel from "@/components/Carousel";
 import { APP_COLORS } from "@/constants/Colors";
 import { scale, verticalScale } from "@/constants/metrics";
 import useKitaab from "@/layouts/App/Kitaab/KitaabContainer";
+import image1 from "@assets/images/carouselImgs/1.jpg";
+import image2 from "@assets/images/carouselImgs/2.jpg";
+import image3 from "@assets/images/carouselImgs/3.jpg";
+import image4 from "@assets/images/carouselImgs/4.jpg";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { navigate } from "expo-router/build/global-state/routing";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import img1 from "../../../assets/images/carouselImgs/img1.jpg";
-import img2 from "../../../assets/images/carouselImgs/img2.jpg";
-import img3 from "../../../assets/images/carouselImgs/img3.jpg";
 
 export default function Kitaab() {
   const { isLoading, totals } = useKitaab();
   return (
-    <View style={styles.container}>
+    <>
       <View style={styles.header}>
         <Text style={styles.title}>Kitaab</Text>
       </View>
-
-      <AutoplayCarousel autoPlayInterval={2000} data={[img1, img2, img3]} />
-
-      <View style={styles.cardContainer}>
-        <View>
-          <Text style={styles.deeds}>Deeds & Summary</Text>
-          <Text style={styles.subtitle}>Track your sawab & gunah</Text>
-        </View>
-        <View style={{ flexDirection: "row", gap: 10 }}>
-          <View style={styles.sawabGunahContainer}>
-            <Text style={styles.sawabGunahTitle}>{totals?.sawab}</Text>
-            <Text style={[styles.subtitle, { color: APP_COLORS.lightText }]}>
-              Sawab
-            </Text>
+      <AutoplayCarousel data={[image4, image3, image1, image2]} />
+      <View style={styles.container}>
+        <View style={styles.cardContainer}>
+          <View>
+            <Text style={styles.deeds}>Deeds & Summary</Text>
+            <Text style={styles.subtitle}>Track your sawab & gunah</Text>
           </View>
-          <View
-            style={[
-              styles.sawabGunahContainer,
-              { backgroundColor: APP_COLORS.logoutBg },
-            ]}
-          >
-            <Text style={[styles.sawabGunahTitle, { color: APP_COLORS.text }]}>
-              {totals?.gunah}
-            </Text>
-            <Text style={[styles.subtitle, { color: APP_COLORS.lightText }]}>
-              Gunah
-            </Text>
+          <View style={{ flexDirection: "row", gap: 10 }}>
+            <View style={styles.sawabGunahContainer}>
+              <Text style={styles.sawabGunahTitle}>{totals?.sawab}</Text>
+              <Text style={[styles.subtitle, { color: APP_COLORS.lightText }]}>
+                Sawab
+              </Text>
+            </View>
+            <View
+              style={[
+                styles.sawabGunahContainer,
+                { backgroundColor: APP_COLORS.logoutBg },
+              ]}
+            >
+              <Text
+                style={[styles.sawabGunahTitle, { color: APP_COLORS.text }]}
+              >
+                {totals?.gunah}
+              </Text>
+              <Text style={[styles.subtitle, { color: APP_COLORS.lightText }]}>
+                Gunah
+              </Text>
+            </View>
           </View>
+
+          <Text style={styles.sawabGained}>
+            You gained {totals?.todaySawab} Sawab today
+          </Text>
         </View>
 
-        <Text style={styles.sawabGained}>
-          You gained {totals?.todaySawab} Sawab today
-        </Text>
+        <TouchableOpacity
+          style={styles.floatingButton}
+          onPress={() => navigate("/(app)/add_record")}
+        >
+          <MaterialCommunityIcons name="plus" size={30} color="#fff" />
+        </TouchableOpacity>
       </View>
-
-      <TouchableOpacity
-        style={styles.floatingButton}
-        onPress={() => navigate("/(app)/add_record")}
-      >
-        <MaterialCommunityIcons name="plus" size={30} color="#fff" />
-      </TouchableOpacity>
-    </View>
+    </>
   );
 }
 
@@ -115,6 +118,7 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: "center",
+    padding: 16,
   },
   title: {
     fontSize: 24,

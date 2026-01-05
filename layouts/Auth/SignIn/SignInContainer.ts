@@ -9,6 +9,8 @@ export default function useSignIn() {
     email: "",
     password: "",
   });
+
+  const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
   const { setIsAuth } = useAuthStore();
   const handleLogin = async () => {
     try {
@@ -30,5 +32,7 @@ export default function useSignIn() {
     credentials,
     setCredentials,
     isLoading,
+    isPasswordVisible,
+    setIsPasswordVisible
   };
 }

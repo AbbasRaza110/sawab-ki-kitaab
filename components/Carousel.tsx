@@ -1,168 +1,96 @@
-import React, { useEffect, useRef, useState } from "react";
-import {
-  Dimensions,
-  FlatList,
-  Image,
-  ImageSourcePropType,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
+import * as React from "react";
+import { Dimensions, Image, ImageSourcePropType, View } from "react-native";
+import { useSharedValue } from "react-native-reanimated";
+import Carousel, {
+  ICarouselInstance,
+  Pagination,
+} from "react-native-reanimated-carousel";
 
-const { width: screenWidth } = Dimensions.get("window");
+const screenWidth = Dimensions.get("window").width;
 
-type AutoplayCarouselProps = {
+// Define your data type properly
+type Props = {
   data: ImageSourcePropType[];
-  height?: number;
-  autoPlayInterval?: number;
-  loop?: boolean;
-  showDots?: boolean;
 };
 
-export default function AutoplayCarousel({
-  data = [],
-  height = 200,
-  autoPlayInterval = 3000,
-  loop = true,
-  showDots = true,
-}: AutoplayCarouselProps) {
-  const flatListRef = useRef<FlatList<ImageSourcePropType>>(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const timer = useRef<NodeJS.Timeout | null>(null);
-  const isTouched = useRef(false);
+function AutoplayCarousel({ data }: Props) {
+  const ref = React.useRef<ICarouselInstance>(null);
+  const progress = useSharedValue<number>(0);
 
-  const itemCount = data.length;
+  // 1200x400 calculation
+  const finalHeight = 200;
 
-  useEffect(() => {
-    startAutoPlay();
-    return stopAutoPlay;
-  }, [currentIndex, itemCount]);
-
-  const startAutoPlay = () => {
-    if (timer.current || itemCount <= 1) return;
-    timer.current = setInterval(() => {
-      if (!isTouched.current) goToNext();
-    }, autoPlayInterval);
+  const onPressPagination = (index: number) => {
+    ref.current?.scrollTo({
+      /**
+       * Use absolute index for the scroll to avoid calculation errors
+       * when user clicks dots rapidly.
+       */
+      index,
+      animated: true,
+    });
   };
-
-  const stopAutoPlay = () => {
-    if (timer.current) {
-      clearInterval(timer.current);
-      timer.current = null;
-    }
-  };
-
-  const goTo = (index: number) => {
-    if (!flatListRef.current) return;
-    flatListRef.current.scrollToIndex({ index, animated: true });
-    setCurrentIndex(index);
-  };
-
-  const goToNext = () => {
-    let next = currentIndex + 1;
-    if (next >= itemCount) {
-      if (loop) next = 0;
-      else return stopAutoPlay();
-    }
-    goTo(next);
-  };
-
-  const onViewableItemsChanged = useRef(
-    ({ viewableItems }: { viewableItems: Array<{ index?: number }> }) => {
-      if (viewableItems.length > 0) {
-        setCurrentIndex(viewableItems[0].index ?? 0);
-      }
-    }
-  ).current;
-
-  const viewabilityConfig = useRef({
-    viewAreaCoveragePercentThreshold: 50,
-  }).current;
-
-  const handleTouchStart = () => {
-    isTouched.current = true;
-    stopAutoPlay();
-  };
-
-  const handleTouchEnd = () => {
-    isTouched.current = false;
-    setTimeout(() => startAutoPlay(), 2000);
-  };
-
-  if (!data || data.length === 0) {
-    return (
-      <View style={[styles.emptyContainer, { height }]}>
-        <Text>No images</Text>
-      </View>
-    );
-  }
 
   return (
-    <View style={{ height }}>
-      <TouchableWithoutFeedback
-        onPressIn={handleTouchStart}
-        onPressOut={handleTouchEnd}
-      >
-        <FlatList
-          ref={flatListRef}
-          data={data}
-          keyExtractor={(_, i) => i.toString()}
-          renderItem={({ item }) => (
+    <View style={{ width: screenWidth, height: finalHeight + 20 }}>
+      <Carousel
+        ref={ref}
+        width={screenWidth}
+        height={finalHeight}
+        data={data}
+        pagingEnabled={true}
+        snapEnabled={true}
+        autoPlay={true}
+        autoPlayInterval={3000}
+        scrollAnimationDuration={1000}
+        // This is key: it maps the carousel progress to your shared value
+        onProgressChange={(_, absoluteProgress) => {
+          progress.value = absoluteProgress;
+        }}
+        mode="parallax"
+        modeConfig={{
+          parallaxScrollingScale: 0.9,
+          parallaxScrollingOffset: 50,
+        }}
+        renderItem={({ item }) => (
+          <View style={{ flex: 1 }}>
             <Image
               source={item}
-              style={[styles.image, { width: screenWidth, height }]}
-              resizeMode="cover"
+              style={{
+                width: screenWidth,
+                height: finalHeight,
+                borderRadius: 12,
+                alignSelf: "center",
+              }}
+              resizeMode="stretch"
             />
-          )}
-          horizontal
-          pagingEnabled
-          showsHorizontalScrollIndicator={false}
-          onViewableItemsChanged={onViewableItemsChanged}
-          viewabilityConfig={viewabilityConfig}
-        />
-      </TouchableWithoutFeedback>
+          </View>
+        )}
+      />
 
-      {showDots && (
-        <View style={styles.dotsContainer} pointerEvents="none">
-          {data.map((_, i) => (
-            <View
-              key={i}
-              style={[styles.dot, i === currentIndex ? styles.dotActive : null]}
-            />
-          ))}
-        </View>
-      )}
+      {/* Pagination component */}
+      <Pagination.Basic
+        progress={progress}
+        data={data}
+        dotStyle={{
+          backgroundColor: "rgba(0,0,0,0.2)",
+          width: 8,
+          height: 8,
+          borderRadius: 4,
+        }}
+        activeDotStyle={{
+          backgroundColor: "#000",
+          width: 20, // Professional expanding effect
+        }}
+        containerStyle={{
+          gap: 5,
+          marginTop: 10,
+          justifyContent: "center",
+        }}
+        onPress={onPressPagination}
+      />
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  image: {
-    backgroundColor: "#eee",
-  },
-  dotsContainer: {
-    position: "absolute",
-    bottom: 10,
-    left: 0,
-    right: 0,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 8,
-    backgroundColor: "rgba(255,255,255,0.6)",
-    marginHorizontal: 4,
-  },
-  dotActive: {
-    backgroundColor: "white",
-    transform: [{ scale: 1.2 }],
-  },
-  emptyContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
+export default AutoplayCarousel;

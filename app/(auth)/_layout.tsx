@@ -11,10 +11,14 @@ export default function AuthLayout() {
       console.log("......");
 
       const response = await apiClient.get("/auth/me");
-      console.log("Me Response:", response?.data);
+      console.log("Me Response:", response?.data, response.status);
       if (response.status === 200) setIsAuth(true);
     } catch (error: any) {
-      console.log("Me Failed", error?.response.data.message);
+      console.log(
+        "Me Failed",
+        error?.response.data.message,
+        error?.response.status
+      );
     }
   }
 

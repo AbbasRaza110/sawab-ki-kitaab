@@ -127,7 +127,7 @@ const SignUpScreen = () => {
     <>
       <Text style={authStyles.footerText}>Already have an account?</Text>
       {/* Use Link to navigate to the sign-in screen */}
-      <Link href="/(auth)/sign_in" asChild>
+      <Link href="/(auth)" asChild>
         <TouchableOpacity>
           <Text style={authStyles.linkText}>Sign In</Text>
         </TouchableOpacity>

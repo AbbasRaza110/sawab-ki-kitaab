@@ -12,14 +12,27 @@ import {
 } from "react-native";
 
 import useProfile from "@/layouts/App/Profile/useProfile";
+import { useRouter } from "expo-router";
 
-const SETTINGS_ITEMS = [
-  { icon: "shield-outline", title: "Privacy", key: "privacy" },
-  { icon: "information-outline", title: "About", key: "about" },
+type AppRoutes = "about" | "privacy_policy";
+const SETTINGS_ITEMS: {
+  icon: string;
+  title: string;
+  key: string;
+  link: AppRoutes;
+}[] = [
+  {
+    icon: "shield-outline",
+    title: "Privacy",
+    key: "privacy",
+    link: "privacy_policy",
+  },
+  { icon: "information-outline", title: "About", key: "about", link: "about" },
 ];
 
 const ProfileScreen = () => {
   const { handleLogout, isLoading, userData } = useProfile();
+  const router = useRouter();
   const initials = userData?.name
     ? userData.name
         .split(" ")
@@ -73,7 +86,10 @@ const ProfileScreen = () => {
         <View style={styles.settingsCard}>
           {SETTINGS_ITEMS.map((item, index) => (
             <React.Fragment key={item.key}>
-              <TouchableOpacity style={styles.settingItem}>
+              <TouchableOpacity
+                style={styles.settingItem}
+                onPress={() => router.push(`/(app)/${item.link}`)}
+              >
                 <View style={styles.iconBackground}>
                   <MaterialCommunityIcons
                     name={item.icon as any}

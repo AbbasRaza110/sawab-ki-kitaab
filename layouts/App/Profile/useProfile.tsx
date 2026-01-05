@@ -23,6 +23,9 @@ export default function useProfile() {
       }
     } catch (error: any) {
       console.log("Me Failed", error?.response.data.message);
+      if (error?.response.status == 401) {
+        setIsAuth(false);
+      }
     }
   }
 

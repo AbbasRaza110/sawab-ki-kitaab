@@ -12,13 +12,16 @@ export default function AppLayout() {
       if (response.status === 200) setIsAuth(true);
     } catch (error: any) {
       console.log("Me Failed", error?.response.data.message);
+      if (error?.response.status == 401) {
+        setIsAuth(false);
+      }
     }
   }
 
   useEffect(() => {
     me();
     if (!isAuth) {
-      router.replace("/(auth)/index");
+      router.replace("/(auth)");
     } else {
       router.replace("/(app)/(tabs)/kitaab");
     }
@@ -28,6 +31,8 @@ export default function AppLayout() {
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="(tabs)" />
       <Stack.Screen name="add_record" />
+      <Stack.Screen name="about" />
+      <Stack.Screen name="privacy_policy" />
     </Stack>
   );
 }

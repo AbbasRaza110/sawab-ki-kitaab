@@ -54,7 +54,7 @@ const ForgotPasswordScreen = () => {
     <>
       <Text style={authStyles.footerText}>Remembered your password?</Text>
       {/* Use Link to navigate back to the sign-in screen */}
-      <Link href={"/(auth)/sign_in"} asChild>
+      <Link href={"/(auth)"} asChild>
         <TouchableOpacity>
           <Text style={authStyles.linkText}>Log in</Text>
         </TouchableOpacity>

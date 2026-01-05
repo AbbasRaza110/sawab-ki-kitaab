@@ -14,7 +14,14 @@ import {
 } from "react-native";
 
 const SignInScreen = () => {
-  const { handleLogin, credentials, setCredentials, isLoading } = useSignIn();
+  const {
+    handleLogin,
+    credentials,
+    setCredentials,
+    isLoading,
+    isPasswordVisible,
+    setIsPasswordVisible,
+  } = useSignIn();
   // --- Form Content ---
   const FormContent = (
     <>
@@ -51,18 +58,32 @@ const SignInScreen = () => {
           color={APP_COLORS.placeholder}
           style={authStyles.icon}
         />
+
         <TextInput
-          style={authStyles.input}
+          style={[authStyles.input, { flex: 1 }]} // Ensure input takes up space
           placeholder="Enter your password"
           placeholderTextColor={APP_COLORS.placeholder}
-          secureTextEntry={true}
-          onChange={(e) =>
+          secureTextEntry={!isPasswordVisible} // Toggle based on state
+          onChangeText={(
+            text // onChangeText is cleaner than e.nativeEvent.text
+          ) =>
             setCredentials({
-              email: credentials.email,
-              password: e.nativeEvent.text,
+              ...credentials,
+              password: text,
             })
           }
         />
+
+        <TouchableOpacity
+          onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+          style={{ padding: 10 }}
+        >
+          <MaterialCommunityIcons
+            name={isPasswordVisible ? "eye-off" : "eye"}
+            size={20}
+            color={APP_COLORS.placeholder}
+          />
+        </TouchableOpacity>
       </View>
 
       {/* Forgot Password Link */}
