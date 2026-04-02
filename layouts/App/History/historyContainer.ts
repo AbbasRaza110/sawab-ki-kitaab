@@ -1,5 +1,6 @@
 import apiClient from "@/services/apiService";
-import { useEffect, useState } from "react";
+import { useFocusEffect } from "expo-router";
+import { useCallback, useState } from "react";
 
 export default function useHistory() {
   const [isLoading, setIsLoading] = useState(false);
@@ -19,10 +20,11 @@ export default function useHistory() {
     }
   };
 
-  useEffect(() => {
-    GetDeeds();
-    console.log("Deeds:", deedsHistory);
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      GetDeeds();
+    }, []),
+  );
 
   return {
     deedsHistory,

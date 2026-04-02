@@ -2,6 +2,7 @@ import apiClient from "@/services/apiService";
 import useAuthStore from "@/store/AuthStore";
 import { router, Stack } from "expo-router";
 import { useEffect } from "react";
+import { ActivityIndicator } from "react-native";
 
 export default function AuthLayout() {
   const { isAuth, setIsAuth } = useAuthStore();
@@ -17,7 +18,7 @@ export default function AuthLayout() {
       console.log(
         "Me Failed",
         error?.response.data.message,
-        error?.response.status
+        error?.response.status,
       );
     }
   }
@@ -28,7 +29,7 @@ export default function AuthLayout() {
       router.replace("/(app)/(tabs)/kitaab");
     }
   }, [isAuth]);
-
+  if (!isAuth) <ActivityIndicator size={20} />;
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="index" />

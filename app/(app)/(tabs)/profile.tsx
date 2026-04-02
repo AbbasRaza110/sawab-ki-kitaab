@@ -40,6 +40,7 @@ const ProfileScreen = () => {
         .join("")
         .toUpperCase()
     : "";
+
   return (
     <View style={styles.outerContainer}>
       <ScrollView
@@ -59,7 +60,7 @@ const ProfileScreen = () => {
           </View>
           <Text style={styles.userName}>{userData?.name}</Text>
           {/* <Text style={styles.userHandle}>{userData?.email}</Text> */}
-          <Text style={styles.joinDate}>Joined 2022</Text>
+          {/* <Text style={styles.joinDate}>Joined 2022</Text> */}
         </View>
 
         {/* Personal Details Section */}
