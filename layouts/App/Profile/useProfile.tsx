@@ -2,7 +2,7 @@ import apiClient from "@/services/apiService";
 import useAuthStore from "@/store/AuthStore";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
-import { Alert } from "react-native";
+import { toast } from "sonner-native";
 
 export interface UserData {
   email?: string;
@@ -32,7 +32,7 @@ export default function useProfile() {
   useFocusEffect(
     useCallback(() => {
       me();
-    }, [])
+    }, []),
   );
 
   const handleLogout = async () => {
@@ -42,10 +42,11 @@ export default function useProfile() {
       if (resonse.status === 201) {
         setIsAuth(false);
       }
-      Alert.alert("Success", "Logged out successfully");
     } catch (error) {
       console.log("Logout Failed", error);
-      Alert.alert("Error", "Failed to log out. Please try again.");
+      toast.error("Error", {
+        description: "Failed to log out. Please try again.",
+      });
     } finally {
       setIsLoading(false);
     }

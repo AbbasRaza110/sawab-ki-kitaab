@@ -4,6 +4,7 @@ import useForgotPassword from "@/layouts/Auth/ForgotPassword/ForgotPasswordConta
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import React from "react";
+import { Controller } from "react-hook-form";
 import {
   ActivityIndicator,
   StyleSheet,
@@ -14,34 +15,50 @@ import {
 } from "react-native";
 
 const ForgotPasswordScreen = () => {
-  const { email, handleForgotPassword, setEmail, isLoading } =
+  const { control, handleForgotPassword, errors, isLoading } =
     useForgotPassword();
+
   // --- Form Content ---
   const FormContent = (
     <>
       {/* Email Input */}
       <Text style={[authStyles.label, { marginTop: 20 }]}>Email Address</Text>
-      <View style={authStyles.inputWrapper}>
-        <MaterialCommunityIcons
-          name="email-outline"
-          size={20}
-          color={APP_COLORS.placeholder}
-          style={authStyles.icon}
-        />
-        <TextInput
-          style={authStyles.input}
-          placeholder="you@example.com"
-          placeholderTextColor={APP_COLORS.placeholder}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          onChange={(e) => setEmail(e.nativeEvent.text)}
-        />
-      </View>
+      <Controller
+        control={control}
+        name="email"
+        render={({ field: { onChange, value } }) => (
+          <View>
+            <View style={authStyles.inputWrapper}>
+              <MaterialCommunityIcons
+                name="email-outline"
+                size={20}
+                color={APP_COLORS.placeholder}
+                style={authStyles.icon}
+              />
+              <TextInput
+                style={authStyles.input}
+                placeholder="you@example.com"
+                placeholderTextColor={APP_COLORS.placeholder}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                onChangeText={onChange}
+                value={value}
+              />
+            </View>
+            {errors.email && (
+              <Text style={{ color: "red", fontSize: 12 }}>
+                {errors.email.message}
+              </Text>
+            )}
+          </View>
+        )}
+      />
 
       {/* Send Reset Link Button */}
       <TouchableOpacity
         style={[authStyles.primaryButton, { marginTop: 10 }]}
         onPress={handleForgotPassword}
+        disabled={isLoading}
       >
         {isLoading && <ActivityIndicator color={"#fff"} />}
         <Text style={authStyles.primaryButtonText}>Submit</Text>

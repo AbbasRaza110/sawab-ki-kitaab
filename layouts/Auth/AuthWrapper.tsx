@@ -1,6 +1,12 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native"; // Removed SafeAreaView import
+import {
+  KeyboardAvoidingView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 // Assuming APP_COLORS is correctly configured at this path
 import { APP_COLORS } from "@/constants/Colors";
 import { AuthWrapperProps } from "./types";
@@ -22,9 +28,13 @@ const AuthWrapper = ({
   showAppTitle = true,
 }: AuthWrapperProps) => {
   return (
-    // Replaced SafeAreaView with a standard View, applying the full screen layout styles
-    <View style={styles.container}>
-      <View style={styles.mainContent}>
+    <ScrollView
+      contentContainerStyle={styles.scrollContent}
+      showsVerticalScrollIndicator={false}
+      keyboardShouldPersistTaps="handled"
+      scrollEnabled={true}
+    >
+      <KeyboardAvoidingView style={styles.mainContent} behavior={"position"}>
         {/* Logo and Screen Title Header */}
         <View style={styles.header}>
           <View style={styles.logoContainer}>
@@ -47,24 +57,26 @@ const AuthWrapper = ({
 
         {/* --- Dynamic Footer --- */}
         <View style={styles.footer}>{footer}</View>
-      </View>
-    </View>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 
 // --- STYLES ---
 const styles = StyleSheet.create({
-  // Renamed from safeArea to container and kept the full-screen centering styles
   container: {
     flex: 1,
     backgroundColor: APP_COLORS.background,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingHorizontal: 30,
+    paddingVertical: 30,
+    paddingBottom: 80,
     justifyContent: "center",
-    alignItems: "center",
   },
   mainContent: {
     width: "100%",
-    paddingVertical: 30,
-    paddingHorizontal: 30, // Increased padding for better spacing
   },
   header: {
     alignItems: "center",

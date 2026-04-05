@@ -3,6 +3,7 @@ import AuthWrapper, { authStyles } from "@/layouts/Auth/AuthWrapper";
 import useResetPassword from "@/layouts/Auth/ResetPassword/ResetPasswordContainer";
 import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
+import { Controller } from "react-hook-form";
 import {
   ActivityIndicator,
   StyleSheet,
@@ -16,8 +17,8 @@ const ResetPasswordScreen = () => {
   const {
     isLoading,
     handleResetPassword,
-    resetPasswordCredentials,
-    setResetPasswordCredentials,
+    control,
+    errors,
     isPasswordVisible,
     setIsPasswordVisible,
   } = useResetPassword();
@@ -26,79 +27,97 @@ const ResetPasswordScreen = () => {
     <>
       {/* New Password Input */}
       <Text style={[authStyles.label, { marginTop: 20 }]}>New Password</Text>
-      <View style={authStyles.inputWrapper}>
-        <FontAwesome5
-          name="lock"
-          size={18}
-          color={APP_COLORS.placeholder}
-          style={authStyles.icon}
-        />
-        <TextInput
-          style={authStyles.input}
-          placeholder="Enter new password"
-          placeholderTextColor={APP_COLORS.placeholder}
-          secureTextEntry={!isPasswordVisible?.password}
-          onChange={(e) =>
-            setResetPasswordCredentials({
-              password: e.nativeEvent.text,
-              confirmPassword: resetPasswordCredentials.confirmPassword,
-            })
-          }
-        />
-        <TouchableOpacity
-          onPress={() =>
-            setIsPasswordVisible({
-              confirmPassword: isPasswordVisible.confirmPassword,
-              password: !isPasswordVisible.password,
-            })
-          }
-          style={{ padding: 10 }}
-        >
-          <MaterialCommunityIcons
-            name={isPasswordVisible.password ? "eye-off" : "eye"}
-            size={20}
-            color={APP_COLORS.placeholder}
-          />
-        </TouchableOpacity>
-      </View>
+      <Controller
+        control={control}
+        name="password"
+        render={({ field: { onChange, value } }) => (
+          <>
+            <View style={authStyles.inputWrapper}>
+              <FontAwesome5
+                name="lock"
+                size={18}
+                color={APP_COLORS.placeholder}
+                style={authStyles.icon}
+              />
+              <TextInput
+                style={authStyles.input}
+                placeholder="Enter new password"
+                placeholderTextColor={APP_COLORS.placeholder}
+                secureTextEntry={!isPasswordVisible?.password}
+                value={value}
+                onChangeText={onChange}
+              />
+              <TouchableOpacity
+                onPress={() =>
+                  setIsPasswordVisible({
+                    confirmPassword: isPasswordVisible.confirmPassword,
+                    password: !isPasswordVisible.password,
+                  })
+                }
+                style={{ padding: 10 }}
+              >
+                <MaterialCommunityIcons
+                  name={isPasswordVisible.password ? "eye-off" : "eye"}
+                  size={20}
+                  color={APP_COLORS.placeholder}
+                />
+              </TouchableOpacity>
+            </View>
+            {errors.password && (
+              <Text style={{ color: "red", fontSize: 12, marginTop: 5 }}>
+                {errors.password.message}
+              </Text>
+            )}
+          </>
+        )}
+      />
 
       {/* Confirm New Password Input */}
       <Text style={authStyles.label}>Confirm New Password</Text>
-      <View style={authStyles.inputWrapper}>
-        <FontAwesome5
-          name="lock"
-          size={18}
-          color={APP_COLORS.placeholder}
-          style={authStyles.icon}
-        />
-        <TextInput
-          style={authStyles.input}
-          placeholder="Confirm new password"
-          placeholderTextColor={APP_COLORS.placeholder}
-          secureTextEntry={!isPasswordVisible?.confirmPassword}
-          onChange={(e) =>
-            setResetPasswordCredentials({
-              password: resetPasswordCredentials.confirmPassword,
-              confirmPassword: e.nativeEvent.text,
-            })
-          }
-        />
-        <TouchableOpacity
-          onPress={() =>
-            setIsPasswordVisible({
-              confirmPassword: !isPasswordVisible.confirmPassword,
-              password: isPasswordVisible.password,
-            })
-          }
-          style={{ padding: 10 }}
-        >
-          <MaterialCommunityIcons
-            name={isPasswordVisible.confirmPassword ? "eye-off" : "eye"}
-            size={20}
-            color={APP_COLORS.placeholder}
-          />
-        </TouchableOpacity>
-      </View>
+      <Controller
+        control={control}
+        name="confirmPassword"
+        render={({ field: { onChange, value } }) => (
+          <>
+            <View style={authStyles.inputWrapper}>
+              <FontAwesome5
+                name="lock"
+                size={18}
+                color={APP_COLORS.placeholder}
+                style={authStyles.icon}
+              />
+              <TextInput
+                style={authStyles.input}
+                placeholder="Confirm new password"
+                placeholderTextColor={APP_COLORS.placeholder}
+                secureTextEntry={!isPasswordVisible?.confirmPassword}
+                value={value}
+                onChangeText={onChange}
+              />
+              <TouchableOpacity
+                onPress={() =>
+                  setIsPasswordVisible({
+                    confirmPassword: !isPasswordVisible.confirmPassword,
+                    password: isPasswordVisible.password,
+                  })
+                }
+                style={{ padding: 10 }}
+              >
+                <MaterialCommunityIcons
+                  name={isPasswordVisible.confirmPassword ? "eye-off" : "eye"}
+                  size={20}
+                  color={APP_COLORS.placeholder}
+                />
+              </TouchableOpacity>
+            </View>
+            {errors.confirmPassword && (
+              <Text style={{ color: "red", fontSize: 12, marginTop: 5 }}>
+                {errors.confirmPassword.message}
+              </Text>
+            )}
+          </>
+        )}
+      />
 
       {/* Reset Password Button */}
       <TouchableOpacity

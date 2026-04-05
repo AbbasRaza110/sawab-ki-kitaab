@@ -1,11 +1,34 @@
 import apiClient from "@/services/apiService";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
-import { Alert } from "react-native";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner-native";
+import { resetPasswordResolver } from "./ResetPasswordSchema";
+
+export type ResetPasswordFormValues = {
+  password: string;
+  confirmPassword: string;
+};
 
 export default function useResetPassword() {
   const { email, otp } = useLocalSearchParams();
   const router = useRouter();
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm<ResetPasswordFormValues>({
+    defaultValues: {
+      password: "",
+      confirmPassword: "",
+    },
+    resolver: resetPasswordResolver,
+    mode: "all",
+  });
+
+  const [isLoading, setIsLoading] = React.useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = React.useState({
     password: false,
     confirmPassword: false,
@@ -13,37 +36,38 @@ export default function useResetPassword() {
 
   console.log("asdasdas", email, otp);
 
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [resetPasswordCredentials, setResetPasswordCredentials] =
-    React.useState({
-      password: "",
-      confirmPassword: "",
-    });
+  // Watch form values for real-time updates
+  const credentials = watch();
 
-  const handleResetPassword = async () => {
+  const onSubmit = async (data: ResetPasswordFormValues) => {
     try {
-      console.log("@@@@@@", resetPasswordCredentials);
-
       setIsLoading(true);
       const response = await apiClient.post("/auth/reset-password", {
-        ...resetPasswordCredentials,
+        password: data.password,
+        confirmPassword: data.confirmPassword,
         email,
         otp,
       });
-      console.log("Reset Password Response:", response.data);
+      toast.success("Success", {
+        description: "Your password has been reset successfully.",
+      });
       router.replace("/(auth)");
-      Alert.alert("Success", "Your password has been reset successfully!");
     } catch (error: any) {
-      Alert.alert("Reset Password Failed", error?.response.data.message);
+      toast.error("Error", {
+        description: error?.response.data.message || "An error occurred.",
+      });
     } finally {
       setIsLoading(false);
     }
   };
 
+  const handleResetPassword = handleSubmit(onSubmit);
+
   return {
+    control,
     handleResetPassword,
-    setResetPasswordCredentials,
-    resetPasswordCredentials,
+    credentials,
+    errors,
     isLoading,
     isPasswordVisible,
     setIsPasswordVisible,

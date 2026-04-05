@@ -2,6 +2,7 @@ import apiClient from "@/services/apiService";
 import { goBack } from "expo-router/build/global-state/routing";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner-native";
 import { addDeedResolver } from "./AddDeedSchema";
 
 export type AddDeedFormValues = {
@@ -35,11 +36,16 @@ const useAddDeed = () => {
       if (response.status === 201 || response.status === 200) {
         goBack();
       }
-    } catch (error) {
+    } catch (error: any) {
       console.log("create Deeds Failed", error);
+      toast.error("Error", {
+        description:
+          error?.response.data.message ||
+          "Failed to add deed. Please try again.",
+      });
     } finally {
       setIsLoading(false);
-      reset(); // reset form after submit
+      reset();
     }
   };
 

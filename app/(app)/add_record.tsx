@@ -49,7 +49,7 @@ const Header: FC<{ onBackPress: () => void }> = ({ onBackPress }) => (
       />
     </TouchableOpacity>
     <Text style={styles.headerTitle}>Add Deed</Text>
-    <View style={styles.backButton} /> {/* Placeholder for alignment */}
+    <View style={styles.backButton} />
   </View>
 );
 
@@ -97,7 +97,7 @@ const TypeCards: FC<TypeCardsProps> = React.memo(
         );
       })}
     </View>
-  )
+  ),
 );
 
 // --- NotesInput Component ---
