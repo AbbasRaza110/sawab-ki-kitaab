@@ -7,7 +7,6 @@ import React from "react";
 import { Controller } from "react-hook-form";
 import {
   ActivityIndicator,
-  ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
@@ -19,10 +18,7 @@ const SignUpScreen = () => {
 
   // --- Form Content ---
   const FormContent = (
-    <ScrollView
-      automaticallyAdjustKeyboardInsets
-      showsVerticalScrollIndicator={false}
-    >
+    <>
       {/* Name Input */}
       <Text style={authStyles.label}>Full Name</Text>
       <Controller
@@ -167,7 +163,7 @@ const SignUpScreen = () => {
         {isLoading && <ActivityIndicator color="#fff" />}
         <Text style={authStyles.primaryButtonText}>Create Account</Text>
       </TouchableOpacity>
-    </ScrollView>
+    </>
   );
 
   // --- Footer Content ---
@@ -185,6 +181,7 @@ const SignUpScreen = () => {
 
   return (
     <AuthWrapper
+      headerStyles={{ marginTop: 50 }}
       showAppTitle={false}
       children={FormContent}
       footer={FooterContent}

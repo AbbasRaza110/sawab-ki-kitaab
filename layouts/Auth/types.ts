@@ -5,4 +5,5 @@ export interface AuthWrapperProps {
   children: React.ReactNode;
   footer?: React.ReactNode;
   iconName?: string;
+  headerStyles?: any;
 }

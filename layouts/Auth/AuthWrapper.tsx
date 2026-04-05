@@ -26,6 +26,7 @@ const AuthWrapper = ({
   title,
   subtitle,
   showAppTitle = true,
+  headerStyles,
 }: AuthWrapperProps) => {
   return (
     <ScrollView
@@ -36,7 +37,7 @@ const AuthWrapper = ({
     >
       <KeyboardAvoidingView style={styles.mainContent} behavior={"position"}>
         {/* Logo and Screen Title Header */}
-        <View style={styles.header}>
+        <View style={[styles.header,headerStyles]}>
           <View style={styles.logoContainer}>
             <MaterialCommunityIcons
               name={iconName as any}
@@ -71,7 +72,6 @@ const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
     paddingHorizontal: 30,
-    paddingVertical: 30,
     paddingBottom: 80,
     justifyContent: "center",
   },
