@@ -13,10 +13,11 @@
       "backgroundColor": "#ffffff"
     },
     "android": {
-      "icon": "./assets/images/Sawab_Ki_Kitaab_Logo.png",
-      "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.sawabkikitaab",
-      "backgroundColor": "#ffffff"
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.anonymous.sawabkikitaab"
     },
     "web": {
       "output": "static",
