@@ -1,10 +1,11 @@
 import apiClient from "@/services/apiService";
 import useAuthStore from "@/store/AuthStore";
-import { router, Stack } from "expo-router";
-import { useEffect } from "react";
+import {router, Stack} from "expo-router";
+import {useEffect} from "react";
+import {SafeAreaView} from "react-native-safe-area-context";
 
 export default function AppLayout() {
-  const { isAuth, setIsAuth } = useAuthStore();
+  const {isAuth, setIsAuth} = useAuthStore();
 
   async function me() {
     try {
@@ -28,11 +29,13 @@ export default function AppLayout() {
   }, [isAuth]);
 
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="(tabs)" />
-      <Stack.Screen name="add_record" />
-      <Stack.Screen name="about" />
-      <Stack.Screen name="privacy_policy" />
-    </Stack>
+    <SafeAreaView style={{flex: 1}} edges={["top", "bottom"]}>
+      <Stack screenOptions={{headerShown: false}}>
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="add_record" />
+        <Stack.Screen name="about" />
+        <Stack.Screen name="privacy_policy" />
+      </Stack>
+    </SafeAreaView>
   );
 }
