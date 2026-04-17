@@ -1,17 +1,21 @@
 {
   "expo": {
-    "name": "sawab-ki-kitaab",
+    "name": "Sawab Ki Kitaab",
     "slug": "sawab-ki-kitaab",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/Sawab_Ki_Kitaab_Logo.png",
+    "icon": "./assets/images/logo.png",
     "scheme": "sawabkikitaab",
     "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": true,
-      "icon": "./assets/images/Sawab_Ki_Kitaab_Logo.png",
       "backgroundColor": "#ffffff",
-      "bundleIdentifier": "com.anonymous.sawabkikitaab"
+      "bundleIdentifier": "com.anonymous.sawabkikitaab",
+      "splash": {
+        "image": "./assets/images/logo.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#ffffff"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -28,7 +32,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash.png",
+          "image": "./assets/images/logo.png",
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
