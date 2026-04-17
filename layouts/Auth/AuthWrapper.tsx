@@ -1,15 +1,16 @@
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
 import React from "react";
 import {
   KeyboardAvoidingView,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
   View,
 } from "react-native";
 // Assuming APP_COLORS is correctly configured at this path
-import { APP_COLORS } from "@/constants/Colors";
-import { AuthWrapperProps } from "./types";
+import {APP_COLORS} from "@/constants/Colors";
+import {AuthWrapperProps} from "./types";
 
 /**
  * Reusable wrapper for authentication screens (Sign In, Sign Up).
@@ -29,22 +30,23 @@ const AuthWrapper = ({
   headerStyles,
 }: AuthWrapperProps) => {
   return (
-    <ScrollView
-      contentContainerStyle={styles.scrollContent}
-      showsVerticalScrollIndicator={false}
-      keyboardShouldPersistTaps="handled"
-      scrollEnabled={true}
+    <KeyboardAvoidingView
+      style={{flex: 1}}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
     >
-      <KeyboardAvoidingView style={styles.mainContent} behavior={"position"}>
-        {/* Logo and Screen Title Header */}
-        <View style={[styles.header,headerStyles]}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={[styles.header, headerStyles]}>
           <View style={styles.logoContainer}>
             <MaterialCommunityIcons
               name={iconName as any}
               size={40}
               color={APP_COLORS.primary}
             />
-            {/* Using a generic name here for reuse, specific titles passed via prop */}
             {showAppTitle && (
               <Text style={styles.logoText}>Sawab Ki Kitaab</Text>
             )}
@@ -53,16 +55,13 @@ const AuthWrapper = ({
           {subtitle && <Text style={styles.subtitleText}>{subtitle}</Text>}
         </View>
 
-        {/* --- Dynamic Form Content --- */}
         <View style={styles.form}>{children}</View>
 
-        {/* --- Dynamic Footer --- */}
         <View style={styles.footer}>{footer}</View>
-      </KeyboardAvoidingView>
-    </ScrollView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
-
 // --- STYLES ---
 const styles = StyleSheet.create({
   container: {
@@ -76,6 +75,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   mainContent: {
+    flex: 1,
     width: "100%",
   },
   header: {
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 15,
     shadowColor: APP_COLORS.primary,
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: {width: 0, height: 4},
     shadowOpacity: 0.3,
     shadowRadius: 5,
     elevation: 5,

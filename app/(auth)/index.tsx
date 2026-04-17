@@ -1,11 +1,11 @@
-import { APP_COLORS } from "@/constants/Colors";
-import AuthWrapper, { authStyles } from "@/layouts/Auth/AuthWrapper";
+import {APP_COLORS} from "@/constants/Colors";
+import AuthWrapper, {authStyles} from "@/layouts/Auth/AuthWrapper";
 import useSignIn from "@/layouts/Auth/SignIn/SignInContainer";
-import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
-import { Link } from "expo-router"; // Import Link for navigation
-import { navigate } from "expo-router/build/global-state/routing";
+import {FontAwesome5, MaterialCommunityIcons} from "@expo/vector-icons";
+import {Link} from "expo-router"; // Import Link for navigation
+import {navigate} from "expo-router/build/global-state/routing";
 import React from "react";
-import { Controller } from "react-hook-form";
+import {Controller} from "react-hook-form";
 import {
   ActivityIndicator,
   Text,
@@ -32,7 +32,7 @@ const SignInScreen = () => {
       <Controller
         control={control}
         name="email"
-        render={({ field: { onChange, value } }) => (
+        render={({field: {onChange, value}}) => (
           <View>
             <View style={authStyles.inputWrapper}>
               <MaterialCommunityIcons
@@ -52,7 +52,7 @@ const SignInScreen = () => {
               />
             </View>
             {errors.email && (
-              <Text style={{ color: "red", fontSize: 12 }}>
+              <Text style={{color: "red", fontSize: 12}}>
                 {errors.email.message}
               </Text>
             )}
@@ -61,11 +61,11 @@ const SignInScreen = () => {
       />
 
       {/* Password Input */}
-      <Text style={[authStyles.label, { marginTop: 15 }]}>Password</Text>
+      <Text style={[authStyles.label, {marginTop: 15}]}>Password</Text>
       <Controller
         control={control}
         name="password"
-        render={({ field: { onChange, value } }) => (
+        render={({field: {onChange, value}}) => (
           <View>
             <View style={authStyles.inputWrapper}>
               <FontAwesome5
@@ -76,7 +76,7 @@ const SignInScreen = () => {
               />
 
               <TextInput
-                style={[authStyles.input, { flex: 1 }]}
+                style={[authStyles.input, {flex: 1}]}
                 placeholder="Enter your password"
                 placeholderTextColor={APP_COLORS.placeholder}
                 secureTextEntry={!isPasswordVisible}
@@ -86,7 +86,7 @@ const SignInScreen = () => {
 
               <TouchableOpacity
                 onPress={() => setIsPasswordVisible(!isPasswordVisible)}
-                style={{ padding: 10 }}
+                style={{padding: 10}}
               >
                 <MaterialCommunityIcons
                   name={isPasswordVisible ? "eye-off" : "eye"}
@@ -96,7 +96,7 @@ const SignInScreen = () => {
               </TouchableOpacity>
             </View>
             {errors.password && (
-              <Text style={{ color: "red", fontSize: 12 }}>
+              <Text style={{color: "red", fontSize: 12}}>
                 {errors.password.message}
               </Text>
             )}
@@ -106,10 +106,12 @@ const SignInScreen = () => {
 
       {/* Forgot Password Link */}
       <TouchableOpacity
-        style={{ alignSelf: "flex-end", marginBottom: 10, marginTop: 10 }}
+        style={{alignSelf: "flex-end", marginBottom: 10, marginTop: 10}}
         onPress={() => navigate("/(auth)/forgot_password")}
       >
-        <Text>Forgot Password?</Text>
+        <Text style={{color: APP_COLORS.primary, fontWeight: "bold"}}>
+          Forgot Password?
+        </Text>
       </TouchableOpacity>
 
       {/* Sign In Button */}

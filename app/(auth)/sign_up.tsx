@@ -1,10 +1,10 @@
-import { APP_COLORS } from "@/constants/Colors";
-import AuthWrapper, { authStyles } from "@/layouts/Auth/AuthWrapper";
+import {APP_COLORS} from "@/constants/Colors";
+import AuthWrapper, {authStyles} from "@/layouts/Auth/AuthWrapper";
 import useSignUp from "@/layouts/Auth/SignUp/SignUpContainer";
-import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
-import { Link } from "expo-router"; // Import Link for navigation
+import {FontAwesome5, MaterialCommunityIcons} from "@expo/vector-icons";
+import {Link} from "expo-router"; // Import Link for navigation
 import React from "react";
-import { Controller } from "react-hook-form";
+import {Controller} from "react-hook-form";
 import {
   ActivityIndicator,
   Text,
@@ -14,7 +14,14 @@ import {
 } from "react-native";
 
 const SignUpScreen = () => {
-  const { control, handleSignUp, errors, isLoading } = useSignUp();
+  const {
+    control,
+    errors,
+    isLoading,
+    handleSignUp,
+    isPasswordVisible,
+    setIsPasswordVisible,
+  } = useSignUp();
 
   // --- Form Content ---
   const FormContent = (
@@ -24,7 +31,7 @@ const SignUpScreen = () => {
       <Controller
         control={control}
         name="name"
-        render={({ field: { onChange, value } }) => (
+        render={({field: {onChange, value}}) => (
           <View>
             <View style={authStyles.inputWrapper}>
               <MaterialCommunityIcons
@@ -43,7 +50,7 @@ const SignUpScreen = () => {
               />
             </View>
             {errors.name && (
-              <Text style={{ color: "red", fontSize: 12 }}>
+              <Text style={{color: "red", fontSize: 12}}>
                 {errors.name.message}
               </Text>
             )}
@@ -52,13 +59,13 @@ const SignUpScreen = () => {
       />
 
       {/* Email Input */}
-      <Text style={[authStyles.label, errors && { marginTop: 15 }]}>
+      <Text style={[authStyles.label, errors && {marginTop: 15}]}>
         Email Address
       </Text>
       <Controller
         control={control}
         name="email"
-        render={({ field: { onChange, value } }) => (
+        render={({field: {onChange, value}}) => (
           <View>
             <View style={authStyles.inputWrapper}>
               <MaterialCommunityIcons
@@ -78,7 +85,7 @@ const SignUpScreen = () => {
               />
             </View>
             {errors.email && (
-              <Text style={{ color: "red", fontSize: 12 }}>
+              <Text style={{color: "red", fontSize: 12}}>
                 {errors.email.message}
               </Text>
             )}
@@ -87,13 +94,13 @@ const SignUpScreen = () => {
       />
 
       {/* Password Input */}
-      <Text style={[authStyles.label, errors && { marginTop: 15 }]}>
+      <Text style={[authStyles.label, errors && {marginTop: 15}]}>
         Password
       </Text>
       <Controller
         control={control}
         name="password"
-        render={({ field: { onChange, value } }) => (
+        render={({field: {onChange, value}}) => (
           <View>
             <View style={authStyles.inputWrapper}>
               <FontAwesome5
@@ -106,13 +113,23 @@ const SignUpScreen = () => {
                 style={authStyles.input}
                 placeholder="Enter your password"
                 placeholderTextColor={APP_COLORS.placeholder}
-                secureTextEntry={true}
+                secureTextEntry={isPasswordVisible}
                 onChangeText={onChange}
                 value={value}
               />
+              <TouchableOpacity
+                onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+                style={{padding: 10}}
+              >
+                <MaterialCommunityIcons
+                  name={isPasswordVisible ? "eye-off" : "eye"}
+                  size={20}
+                  color={APP_COLORS.placeholder}
+                />
+              </TouchableOpacity>
             </View>
             {errors.password && (
-              <Text style={{ color: "red", fontSize: 12 }}>
+              <Text style={{color: "red", fontSize: 12}}>
                 {errors.password.message}
               </Text>
             )}
@@ -121,13 +138,13 @@ const SignUpScreen = () => {
       />
 
       {/* Confirm Password Input */}
-      <Text style={[authStyles.label, errors && { marginTop: 15 }]}>
+      <Text style={[authStyles.label, errors && {marginTop: 15}]}>
         Confirm Password
       </Text>
       <Controller
         control={control}
         name="confirmPassword"
-        render={({ field: { onChange, value } }) => (
+        render={({field: {onChange, value}}) => (
           <View>
             <View style={authStyles.inputWrapper}>
               <FontAwesome5
@@ -140,13 +157,23 @@ const SignUpScreen = () => {
                 style={authStyles.input}
                 placeholder="Confirm your password"
                 placeholderTextColor={APP_COLORS.placeholder}
-                secureTextEntry={true}
+                secureTextEntry={isPasswordVisible}
                 onChangeText={onChange}
                 value={value}
               />
+              <TouchableOpacity
+                onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+                style={{padding: 10}}
+              >
+                <MaterialCommunityIcons
+                  name={isPasswordVisible ? "eye-off" : "eye"}
+                  size={20}
+                  color={APP_COLORS.placeholder}
+                />
+              </TouchableOpacity>
             </View>
             {errors.confirmPassword && (
-              <Text style={{ color: "red", fontSize: 12 }}>
+              <Text style={{color: "red", fontSize: 12}}>
                 {errors.confirmPassword.message}
               </Text>
             )}
@@ -156,7 +183,7 @@ const SignUpScreen = () => {
 
       {/* Create Account Button */}
       <TouchableOpacity
-        style={[authStyles.primaryButton, { marginTop: 20 }]}
+        style={[authStyles.primaryButton, {marginTop: 20}]}
         onPress={handleSignUp}
         disabled={isLoading}
       >
@@ -181,7 +208,7 @@ const SignUpScreen = () => {
 
   return (
     <AuthWrapper
-      headerStyles={{ marginTop: 50 }}
+      headerStyles={{marginTop: 50}}
       showAppTitle={false}
       children={FormContent}
       footer={FooterContent}

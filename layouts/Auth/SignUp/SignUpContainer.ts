@@ -1,9 +1,9 @@
 import apiClient from "@/services/apiService";
-import { dismissTo } from "expo-router/build/global-state/routing";
+import {dismissTo} from "expo-router/build/global-state/routing";
 import React from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner-native";
-import { signUpResolver } from "./SignUpSchema";
+import {useForm} from "react-hook-form";
+import {toast} from "sonner-native";
+import {signUpResolver} from "./SignUpSchema";
 
 export type SignUpFormValues = {
   name: string;
@@ -17,7 +17,7 @@ export default function useSignUp() {
     reset,
     control,
     handleSubmit,
-    formState: { errors },
+    formState: {errors},
     watch,
   } = useForm<SignUpFormValues>({
     defaultValues: {
@@ -31,6 +31,7 @@ export default function useSignUp() {
   });
 
   const [isLoading, setIsLoading] = React.useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
 
   const onSubmit = async (data: SignUpFormValues) => {
     try {
@@ -62,6 +63,8 @@ export default function useSignUp() {
     control,
     handleSignUp,
     errors,
+    isPasswordVisible,
+    setIsPasswordVisible,
     isLoading,
   };
 }
